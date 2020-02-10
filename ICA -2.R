@@ -18,11 +18,9 @@ st <- data.frame(StudentID = c(100, 101, 102, 103, 104, 105, 106, 107, 108, 109)
 
 #2- Add GPA  to the data frame and calculate GPA for the students based on grade1, grade2, and grade3
 
-gradeToGPA <- function(x) {
-  
-}
 
-st$Avg <- rowMeans(st[c('Grade1', 'Grade2', 'Grade3')], na.rm=TRUE)
+
+st$GradeAverage <- rowMeans(st[c('Grade1', 'Grade2', 'Grade3')], na.rm=TRUE)
 
 st
 
