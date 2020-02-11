@@ -16,9 +16,9 @@ st <- data.frame(StudentID = c(100, 101, 102, 103, 104, 105, 106, 107, 108, 109)
                  Grade3 = c(93, 87, 86, 71, 75, 92, 78, 75, 80, 95),
                  WeeklyStudyHours = c(14, 10, 5, 0, 4, 7, 0, 2, 3, 5))
 
+st
+
 #2- Add GPA  to the data frame and calculate GPA for the students based on grade1, grade2, and grade3
-
-
 
 st$GradeAverage <- rowMeans(st[c('Grade1', 'Grade2', 'Grade3')], na.rm=TRUE)
 
@@ -26,5 +26,26 @@ st
 
 #3- create a discretized data frame using equal interval by discretizing grade1, grade2, and grade3 to 
 #    three categories (bad, good, very good) and draw three plots to show the distribution of the grades
+
+st_discrete <- data.frame(
+  StudentID = st$StudentID,
+  StudentName = st$StudentName,
+  grade1 = cut(st$Grade1, breaks=3,
+                    labels=c("bad", "good", "very good"), ordered=TRUE),
+  grade2 = cut(st$Grade2, breaks=3,
+                   labels=c("bad", "good", "very good"), ordered=TRUE),
+  grade3 = cut(st$Grade3, breaks=3,
+                    labels=c("bad", "good", "very good"), ordered=TRUE)
+  )
+
+st_discrete
+
+barplot(table(st_discrete$grade1),xlab = "Grade 1", ylab = "count")
+barplot(table(st_discrete$grade2),xlab = "Grade 2", ylab = "count")
+barplot(table(st_discrete$grade3),xlab = "Grade 3", ylab = "count")
+
 #4-draw a plot to show the distribution of a continuous attribute in the original dataset
+boxplot(st$GradeAverage, horizontal=TRUE)
+
 #5-draw a plot to show the distribution between a continuous attribute  and a discrete attribute in the original dataset
+boxplot(st$GradeAverage ~ st$Sex, data = st, horizontal=TRUE)
