@@ -1,0 +1,63 @@
+# Group_Assignment_01
+#Consider 66% of the attached dataset as the training set and the remaining as the testing dataset,
+#build a NaiveBayes classifier to predict which passengers survived the Titanic shipwreck.
+#Then apply the model on the testing set,
+#and calculate sensitivity, specificity, precision, accuracy,  error, and f-score
+install.packages('e1071')
+
+ 
+library(e1071)
+# Step-1: Import Data
+df <- read.table("titanic", header=T, sep="")
+df
+
+# Improve the quality of "titanic"
+is.na(df) # There are missing values.
+
+# handling  missing values by removing them
+df <- na.omit(df)
+ 
+# Remove duplicate rows by using unique()
+df <- unique(df[complete.cases(df),])
+summary(df) 
+
+# Assign names to each attributes
+varNames <- c("PassengerId", "Survived", "Pclass", "Name", "Sex", "Age", "SibSp", "Parch", "Ticket", "Fare", "Cabin", "Embarked")
+
+names(df) <- varNames
+
+
+# Step-2: Consider 66% of the attached dataset as the training set and the remaining as the testing dataset,
+# get 2/3 of training set
+n_train <- as.integer(nrow(df)*.66)
+n_train
+
+# then randomly choose the rows of the training examples.
+train_id <- sample(1:nrow(df),n_train)
+head(train_id)
+
+# split the data
+train <- df[train_id,]
+test <- df[-train_id, colnames(df) != "Survived"]
+test_Survived <- df[-train_id, "Survived"]
+test_Survived
+
+nrow(train)
+nrow(test)
+nrow(test_Survived)
+
+
+# Step-3: build a NaiveBayes classifier to predict which passengers survived the Titanic shipwreck.
+nb_mod <- naiveBayes(Survived ~ ., data=train)
+
+#Predict a class label for the testing dataset using NaiveBayes classifier
+pred_test <- predict(nb_mod, test, type="class")
+ 
+head(pred_test)
+
+
+# Step-4: calculate sensitivity, specificity, precision, accuracy,  error, and f-score
+
+# confusion table for test dataset to evalute predictions of NaiveBayes classifier on the test dataset
+confusion_table_test <- table(test_Survived,pred_test$class )
+confusion_table_test
